@@ -53,6 +53,8 @@ class App extends Component {
 
     this.patientSignInComponent = this.patientSignInComponent.bind(this);
     this.signUpComponent = this.signUpComponent.bind(this);
+    this.doctorSignInComponent = this.doctorSignInComponent.bind(this);
+    this.staffSignInComponent = this.staffSignInComponent.bind(this);
   }
 
   patientSignInComponent() {
@@ -70,6 +72,24 @@ class App extends Component {
       showSignInComponent: false,
       showSignUpComponent: true,
       isStaffMode: false,
+    });
+  }
+
+  doctorSignInComponent() {
+    this.setState({
+      isDoctorMode: true,
+      showSignInComponent: true,
+      showSignUpComponent: false,
+      isStaffMode: false,
+    });
+  }
+
+  staffSignInComponent() {
+    this.setState({
+      isDoctorMode: false,
+      showSignInComponent: false,
+      showSignUpComponent: false,
+      isStaffMode: true,
     });
   }
 
@@ -147,6 +167,9 @@ class App extends Component {
                       <Homepage
                         isDoctorMode={this.state.isDoctorMode}
                         signInOutSwitch={this.patientSignInComponent}
+                        signUpSwitch={this.signUpComponent}
+                        doctorSignInSwitch={this.doctorSignInComponent}
+                        staffSignInSwitch={this.staffSignInComponent}
                         showSignInComponent={this.state.showSignInComponent}
                         showSignUpComponent={this.state.showSignUpComponent}
                         isStaffMode={this.state.isStaffMode}

@@ -93,15 +93,53 @@ const TESTIMONIALS = [
 class Homepage extends React.Component {
   constructor(props) {
     super(props);
+    // Determine initial view from props (e.g. if App.js already has a mode set)
     this.state = {
-      view: "landing", // 'landing' | 'role-select' | 'patient-login' | 'patient-signup' | 'doctor-login' | 'staff-login'
+      view: Homepage._viewFromProps(props),
     };
     this.goLanding = this.goLanding.bind(this);
     this.goRoleSelect = this.goRoleSelect.bind(this);
   }
 
-  goLanding() { this.setState({ view: "landing" }); }
+  // Derive view from App.js props
+  static _viewFromProps(props) {
+    if (props.showSignUpComponent) return "patient-signup";
+    if (props.isDoctorMode && props.showSignInComponent) return "doctor-login";
+    if (props.isStaffMode) return "staff-login";
+    if (props.showSignInComponent) return "role-select";
+    return "landing";
+  }
+
+  componentDidUpdate(prevProps) {
+    // React to Navbar Login / Register button clicks (they update App.js state → new props)
+    const p = this.props;
+    const pp = prevProps;
+
+    if (p.showSignUpComponent !== pp.showSignUpComponent && p.showSignUpComponent) {
+      this.setState({ view: "patient-signup" });
+      return;
+    }
+    if (p.isDoctorMode !== pp.isDoctorMode && p.isDoctorMode && p.showSignInComponent) {
+      this.setState({ view: "doctor-login" });
+      return;
+    }
+    if (p.isStaffMode !== pp.isStaffMode && p.isStaffMode) {
+      this.setState({ view: "staff-login" });
+      return;
+    }
+    if (p.showSignInComponent !== pp.showSignInComponent && p.showSignInComponent && !p.isDoctorMode && !p.isStaffMode) {
+      // Navbar "Login" clicked → go to role-select so user picks their portal
+      this.setState({ view: "role-select" });
+      return;
+    }
+  }
+
+  goLanding() {
+    // Reset App.js state AND local view
+    window.location.href = "/";
+  }
   goRoleSelect() { this.setState({ view: "role-select" }); }
+
 
   render() {
     const { view } = this.state;
