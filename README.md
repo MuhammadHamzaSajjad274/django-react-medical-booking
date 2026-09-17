@@ -44,9 +44,11 @@ eDoc is a production-ready healthcare channelling platform that digitises the en
 
 The system supports three distinct user roles — **Patients**, **Doctors**, and **Hospital Staff** — each with a dedicated, purpose-built portal and permission scope.
 
-https://github.com/user-attachments/assets/3c1502e9-6aac-496e-8613-0cc4af936df7
----
 
+---
+## 🎥 Demo
+
+https://github.com/user-attachments/assets/3c1502e9-6aac-496e-8613-0cc4af936df7
 ## ✨ Features
 
 ### 👤 Patient Portal
