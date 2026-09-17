@@ -2,6 +2,8 @@ import React, { Component, Fragment, lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import "./design-system.css";
+
 import Alerts from "./layout/Alerts";
 import { Provider } from "react-redux"; //Connecting react to redux via this Provider
 import store from "../store";

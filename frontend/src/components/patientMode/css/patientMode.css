@@ -1,11 +1,8 @@
 /*--------------------------------------------------------- styles for NavTab.js------------------------------------------------------------------*/
 
+/* Remove old dark heading strip — replaced by navbar offset */
 .registered-patient-heading {
-  width: 100%;
-  height: 90px !important;
-  overflow: hidden;
-  background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-    url(../../guestUserMode/images/Homebackground.jpg);
+  display: none;
 }
 
 @media (min-width: 768px) {
@@ -14,12 +11,193 @@
   }
 }
 
+/* Override MUI tab bar to match design system */
+.MuiAppBar-colorDefault {
+  background-color: #fff !important;
+  box-shadow: 0 2px 12px rgba(26,115,232,0.08) !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+}
+.MuiTab-root {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  color: #64748B !important;
+  min-width: 120px !important;
+  padding: 1rem 1.25rem !important;
+}
+.MuiTab-root.Mui-selected {
+  color: #1A73E8 !important;
+}
+.MuiTabs-indicator {
+  background-color: #1A73E8 !important;
+  height: 3px !important;
+  border-radius: 3px 3px 0 0 !important;
+}
+
 .sticky {
   position: -webkit-sticky;
   position: sticky !important;
-  top: 0 !important;
+  top: 72px !important; /* offset for our fixed navbar */
   z-index: 130 !important;
 }
+
+/* Tab panel background */
+.MuiBox-root {
+  padding: 0 !important;
+}
+
+/*--------------------------------------------------------- Patient Overview Dashboard --------------------------------------------------------*/
+
+.patient-overview {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+/* Welcome banner */
+.patient-overview__welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1A73E8 0%, #00B4A2 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(26,115,232,0.25);
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.patient-overview__greeting {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.patient-overview__greeting-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.6;
+  max-width: 520px;
+}
+.patient-overview__welcome-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  flex-shrink: 0;
+}
+.patient-overview__welcome-badge span {
+  font-size: 2rem;
+}
+.patient-overview__welcome-badge strong {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.125rem;
+}
+.patient-overview__welcome-badge p {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+}
+
+/* Quick action cards grid */
+.patient-overview__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 640px) {
+  .patient-overview__grid { grid-template-columns: 1fr; }
+  .patient-overview { padding: 1.5rem 1rem 3rem; }
+  .patient-overview__welcome { padding: 1.5rem; }
+}
+
+.patient-action-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1.5px solid #E2E8F0;
+  box-shadow: 0 2px 12px rgba(26,115,232,0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+.patient-action-card:hover {
+  box-shadow: 0 8px 28px rgba(26,115,232,0.14);
+  transform: translateY(-3px);
+  border-color: #93C5FD;
+  color: inherit;
+  text-decoration: none;
+}
+.patient-action-card__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: var(--card-icon-bg, #EFF6FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+.patient-action-card__body {
+  flex: 1;
+}
+.patient-action-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
+}
+.patient-action-card__desc {
+  font-size: 0.875rem;
+  color: #64748B;
+  line-height: 1.55;
+}
+.patient-action-card__arrow {
+  font-size: 1.125rem;
+  color: #1A73E8;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+.patient-action-card:hover .patient-action-card__arrow {
+  transform: translateX(4px);
+}
+
+/* Health tip banner */
+.patient-overview__tip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  flex-wrap: wrap;
+}
+.patient-overview__tip-icon { font-size: 1.5rem; flex-shrink: 0; }
+.patient-overview__tip p {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+.patient-overview__tip strong { color: #1A73E8; }
 
 /*--------------------------------------------------------- styles for patientProfile.js------------------------------------------------------------------*/
 

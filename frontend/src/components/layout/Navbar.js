@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../layout/css/NavbarStyle.css";
 import companyLogo from "../layout/images/logo5.png";
 import { connect } from "react-redux";
@@ -7,88 +7,102 @@ import { logout } from "../../actions/auth";
 
 const Navbar = (props) => {
   const { isAuthenticated, user } = props.auth;
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // On the homepage (not authenticated), start transparent; turn white on scroll
+  const isHomepage = !isAuthenticated;
+  const navClass = [
+    "edoc-navbar",
+    isHomepage && !scrolled ? "edoc-navbar--transparent" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const authLinks = (
-    <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-      <span className="navbar-text mr-3">
-        <strong>{user ? `Welcome, ${user.first_name}!` : ""}</strong>
+    <div className="edoc-navbar__actions">
+      <span className="edoc-navbar__user-greeting">
+        {user ? `Hi, ${user.first_name}` : ""}
       </span>
-      <form className="form-inline ">
-        <button
-          type="button"
-          className="btn btn-outline-light rounded-pill"
-          onClick={() => {
-            props.logout();
-            location.href = "/";
-          }}
-        >
-          <b>Logout</b>
-        </button>
-      </form>
-    </ul>
+      <button
+        className="ds-btn ds-btn-secondary ds-btn-sm"
+        onClick={() => {
+          props.logout();
+          window.location.href = "/";
+        }}
+      >
+        Logout
+      </button>
+    </div>
   );
 
   const guestLinks = (
-    <form className="form-inline ">
+    <div className="edoc-navbar__actions">
       <button
-        type="button"
-        className="btn btn-outline-light rounded-pill"
-        onClick={() => {
-          props.signInOutSwitch();
-        }}
+        className="ds-btn ds-btn-secondary ds-btn-sm"
+        onClick={() => props.signInOutSwitch()}
       >
-        <b>Login</b>
+        Login
       </button>
       <button
-        className="btn btn-outline-light rounded-pill ml-3 mr-3"
-        type="button"
-        onClick={() => {
-          props.signUpSwitch();
-        }}
+        className="ds-btn ds-btn-primary ds-btn-sm"
+        onClick={() => props.signUpSwitch()}
       >
-        <b>Register</b>
+        Register
       </button>
-    </form>
+    </div>
   );
 
   return (
-    <nav
-      className={`navbar navbar-expand-lg navbar-dark ${
-        isAuthenticated ? "bg-dark" : "headerZIndex"
-      } header`}
-    >
-      <a className="navbar-brand" href={isAuthenticated ? null : ""}>
-        <img src={companyLogo} width="80" height="50" />
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarTogglerDemo02"
-        aria-controls="navbarTogglerDemo02"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
+    <nav className={navClass} role="navigation" aria-label="Main navigation">
+      <div className="edoc-navbar__inner">
+        {/* Brand */}
+        <a className="edoc-navbar__brand" href="/" aria-label="eDoc Home">
+          <img
+            src={companyLogo}
+            alt="eDoc Logo"
+            className="edoc-navbar__brand-logo"
+          />
+          <span className="edoc-navbar__brand-name">eDoc</span>
+        </a>
 
-      <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul className="navbar-nav mr-auto align-middle">
-          {isAuthenticated ? (
-            ""
-          ) : (
-            <li className="nav-item active">
-              <a className="nav-link" href="">
-                Home <span className="sr-only">(current)</span>
+        {/* Nav links — only show on homepage (guest) */}
+        {!isAuthenticated && (
+          <ul className="edoc-navbar__nav" role="list">
+            <li>
+              <a href="#services" className="edoc-navbar__link">
+                Services
               </a>
             </li>
-          )}
-        </ul>
+            <li>
+              <a href="#doctors" className="edoc-navbar__link">
+                Our Doctors
+              </a>
+            </li>
+            <li>
+              <a href="#about" className="edoc-navbar__link">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="#contact" className="edoc-navbar__link">
+                Contact
+              </a>
+            </li>
+          </ul>
+        )}
+
+        {/* Auth actions */}
         {!props.isDoctorMode && !props.isStaffMode
           ? isAuthenticated
             ? authLinks
             : guestLinks
-          : ""}
+          : null}
       </div>
     </nav>
   );

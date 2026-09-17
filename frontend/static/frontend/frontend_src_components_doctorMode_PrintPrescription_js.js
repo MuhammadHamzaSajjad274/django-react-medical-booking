@@ -30,6 +30,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./frontend/src/components/guestUserMode/images/Homebackground.jpg":
+/*!*************************************************************************!*\
+  !*** ./frontend/src/components/guestUserMode/images/Homebackground.jpg ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"69cc889c2b7c1473ac92d4221f42e5a3.jpg\");\n\n//# sourceURL=webpack://hospital_reservation_app/./frontend/src/components/guestUserMode/images/Homebackground.jpg?");
+
+/***/ }),
+
 /***/ "./frontend/src/components/doctorMode/css/doctorMode.css":
 /*!***************************************************************!*\
   !*** ./frontend/src/components/doctorMode/css/doctorMode.css ***!

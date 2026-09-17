@@ -1,0 +1,363 @@
+/* =========================================================
+   eDoc Medical Platform — Global Design System
+   All CSS custom properties (tokens) used site-wide.
+   Import this ONCE at the top of App.js
+   ========================================================= */
+
+/* ── Google Fonts ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+/* ── Color Tokens ─────────────────────────────────────── */
+:root {
+  /* Primary — Trust Blue */
+  --color-primary:        #1A73E8;
+  --color-primary-dark:   #1557B0;
+  --color-primary-light:  #E8F0FE;
+
+  /* Secondary — Teal (CTAs, accents) */
+  --color-secondary:      #00B4A2;
+  --color-secondary-dark: #008C7D;
+  --color-secondary-light:#E0F7F5;
+
+  /* Neutrals */
+  --color-bg:             #F4F7FB;
+  --color-surface:        #FFFFFF;
+  --color-border:         #E2E8F0;
+  --color-border-strong:  #CBD5E1;
+
+  /* Text */
+  --color-text-heading:   #0F172A;
+  --color-text-body:      #334155;
+  --color-text-muted:     #64748B;
+  --color-text-inverse:   #FFFFFF;
+
+  /* Role accent colors */
+  --color-patient:        #1A73E8;
+  --color-doctor:         #00B4A2;
+  --color-staff:          #7C3AED;
+  --color-admin:          #D97706;
+
+  /* Status */
+  --color-success:        #16A34A;
+  --color-warning:        #D97706;
+  --color-error:          #DC2626;
+
+  /* ── Typography ─────────────────────────────────────── */
+  --font-heading:         'Playfair Display', Georgia, serif;
+  --font-body:            'Inter', -apple-system, sans-serif;
+
+  --text-xs:    0.75rem;   /* 12px */
+  --text-sm:    0.875rem;  /* 14px */
+  --text-base:  1rem;      /* 16px */
+  --text-lg:    1.125rem;  /* 18px */
+  --text-xl:    1.25rem;   /* 20px */
+  --text-2xl:   1.5rem;    /* 24px */
+  --text-3xl:   1.875rem;  /* 30px */
+  --text-4xl:   2.25rem;   /* 36px */
+  --text-5xl:   3rem;      /* 48px */
+  --text-6xl:   3.75rem;   /* 60px */
+
+  --fw-light:   300;
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+  --fw-extrabold:800;
+
+  --leading-tight:  1.25;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+
+  /* ── Spacing (8px scale) ─────────────────────────────── */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* ── Border Radius ───────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ─────────────────────────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.07);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.12);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.15);
+  --shadow-card:0 2px 12px rgba(26,115,232,0.08);
+  --shadow-card-hover: 0 8px 32px rgba(26,115,232,0.18);
+
+  /* ── Transitions ─────────────────────────────────────── */
+  --transition-fast:   150ms ease;
+  --transition-base:   200ms ease;
+  --transition-slow:   300ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Z-index ─────────────────────────────────────────── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+
+  /* ── Container ───────────────────────────────────────── */
+  --container-max: 1200px;
+  --container-pad: var(--space-6);
+}
+
+/* ── Base Reset ───────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-body);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-heading);
+  line-height: var(--leading-tight);
+  font-weight: var(--fw-bold);
+}
+
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { color: var(--color-primary-dark); }
+
+img { max-width: 100%; display: block; }
+button { cursor: pointer; font-family: var(--font-body); }
+
+/* ── Layout Utilities ─────────────────────────────────── */
+.ds-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+.ds-section {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+}
+
+.ds-section-sm {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+/* ── Button System ───────────────────────────────────── */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.75rem 1.75rem;
+  font-size: var(--text-base);
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-body);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ds-btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 14px rgba(26,115,232,0.35);
+}
+.ds-btn-primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 6px 20px rgba(26,115,232,0.45);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.ds-btn-secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.ds-btn-secondary:hover {
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
+  color: var(--color-primary-dark);
+}
+
+.ds-btn-teal {
+  background: var(--color-secondary);
+  color: #fff;
+  border-color: var(--color-secondary);
+  box-shadow: 0 4px 14px rgba(0,180,162,0.30);
+}
+.ds-btn-teal:hover {
+  background: var(--color-secondary-dark);
+  border-color: var(--color-secondary-dark);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.ds-btn-lg {
+  padding: 1rem 2.25rem;
+  font-size: var(--text-lg);
+}
+
+.ds-btn-sm {
+  padding: 0.5rem 1.25rem;
+  font-size: var(--text-sm);
+}
+
+/* ── Card System ─────────────────────────────────────── */
+.ds-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.ds-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+
+/* ── Input System ────────────────────────────────────── */
+.ds-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-base);
+  font-family: var(--font-body);
+  color: var(--color-text-body);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.ds-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(26,115,232,0.15);
+}
+.ds-input::placeholder { color: var(--color-text-muted); }
+
+.ds-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-body);
+  margin-bottom: var(--space-2);
+}
+
+.ds-form-group {
+  margin-bottom: var(--space-5);
+}
+
+/* ── Badge ───────────────────────────────────────────── */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.25rem 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.ds-badge-primary {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.ds-badge-teal {
+  background: var(--color-secondary-light);
+  color: var(--color-secondary-dark);
+}
+
+/* ── Section Heading ─────────────────────────────────── */
+.ds-section-label {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-3);
+}
+.ds-section-title {
+  font-size: var(--text-4xl);
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-heading);
+  margin-bottom: var(--space-4);
+}
+.ds-section-subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+  max-width: 560px;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Scroll Reveal Animations ────────────────────────── */
+.ds-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.ds-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ds-reveal-delay-1 { transition-delay: 0.1s; }
+.ds-reveal-delay-2 { transition-delay: 0.2s; }
+.ds-reveal-delay-3 { transition-delay: 0.3s; }
+.ds-reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── Divider ─────────────────────────────────────────── */
+.ds-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-8) 0;
+}
+
+/* ── Responsive helpers ──────────────────────────────── */
+@media (max-width: 768px) {
+  .ds-section { padding-top: var(--space-16); padding-bottom: var(--space-16); }
+  .ds-section-title { font-size: var(--text-3xl); }
+  :root { --container-pad: var(--space-4); }
+}
+@media (max-width: 480px) {
+  .ds-section-title { font-size: var(--text-2xl); }
+}
