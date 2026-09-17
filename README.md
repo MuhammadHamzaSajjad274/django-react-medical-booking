@@ -43,6 +43,7 @@
 eDoc is a production-ready healthcare channelling platform that digitises the end-to-end appointment lifecycle — from a patient discovering a specialist to the doctor writing a post-consultation prescription. It is built as a Django + React monolith: Django serves the bundled React SPA at `localhost:8000` and exposes a RESTful API on the same origin, eliminating CORS complexity in development.
 
 The system supports three distinct user roles — **Patients**, **Doctors**, and **Hospital Staff** — each with a dedicated, purpose-built portal and permission scope.
+
 https://github.com/user-attachments/assets/3c1502e9-6aac-496e-8613-0cc4af936df7
 ---
 
