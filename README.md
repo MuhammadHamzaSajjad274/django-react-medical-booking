@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./images/tech.png" alt="eDoc Tech Stack" width="100%"/>
+<img src="./Images/tech.png" alt="eDoc Tech Stack" width="100%"/>
 
 # eDoc Healthcare Platform
 
@@ -80,7 +80,7 @@ The system supports three distinct user roles — **Patients**, **Doctors**, and
 
 ## 🏗 Architecture
 
-<img src="./images/architechture.png" alt="eDoc System Architecture" width="100%"/>
+<img src="./Images/architecture.png" alt="eDoc System Architecture" width="100%"/>
 
 The platform follows a **monolithic full-stack** architecture:
 
@@ -116,7 +116,7 @@ Django REST Framework API
 
 ## 🗄 Data Model
 
-<img src="./images/relationship.png" alt="eDoc Entity Relationship Diagram" width="100%"/>
+<img src="./Images/relationship.png" alt="eDoc Entity Relationship Diagram" width="100%"/>
 
 The schema centres on a custom `User` model with three boolean role flags. Each role extends `User` via a `OneToOneField` profile:
 
@@ -135,7 +135,7 @@ The schema centres on a custom `User` model with three boolean role flags. Each 
 
 ## 🔐 Authentication Flow
 
-<img src="./images/software flow.png" alt="eDoc Authentication Flow" width="100%"/>
+<img src="./Images/software%20flow.png" alt="eDoc Authentication Flow" width="100%"/>
 
 eDoc uses **django-rest-knox** for stateless token authentication:
 
