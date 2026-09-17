@@ -12,18 +12,23 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from dotenv import load_dotenv
 
+# Load environment variables from a local .env file (if it exists).
+# In production (e.g. Heroku), env vars are set directly — load_dotenv is a no-op.
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%-%manmhlk)$(xo(pzx1a*^!5p9188cnif5hoojp6x@r7!)ycl'
+SECRET_KEY = os.environ.get('SECRET_KEY', '%-%manmhlk)$(xo(pzx1a*^!5p9188cnif5hoojp6x@r7!)ycl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -40,16 +45,15 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'frontend',
     'corsheaders',
-    'knox', #For User Authentication
+    'knox',  # For User Authentication
     'accounts',
 
     'storages',
 ]
 
-REST_FRAMEWORK = { #setting an option for authentication classes.
+REST_FRAMEWORK = {  # setting an option for authentication classes.
     'DEFAULT_AUTHENTICATION_CLASSES':
-    ('knox.auth.TokenAuthentication',) 
-    
+    ('knox.auth.TokenAuthentication',)
 }
 
 MIDDLEWARE = [
@@ -72,7 +76,7 @@ ROOT_URLCONF = 'hospitalReservation.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'build')],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,6 +91,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hospitalReservation.wsgi.application'
 
+# --- Database ---
+# Default: SQLite for local development.
+# Set DATABASE_URL in your .env file to switch to PostgreSQL:
+#   DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB_NAME
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,35 +102,23 @@ DATABASES = {
     }
 }
 
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -130,7 +126,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/static"),
 ]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -139,17 +134,17 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'reservations.User'
 
 OLD_PASSWORD_FIELD_ENABLED = True
-
 LOGOUT_ON_PASSWORD_CHANGE = False
 
-#S3 BUCKETS CONFIG
+# --- S3 Storage (optional) ---
+# Set these in your .env file to enable S3-backed file/static storage.
+# If not set, files are stored locally in the /media/ folder.
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
 
-# AWS_ACCESS_KEY_ID = '*****' 
-# AWS_SECRET_ACCESS_KEY = '*****' 
-# AWS_STORAGE_BUCKET_NAME = '*****'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
-
-
+if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'

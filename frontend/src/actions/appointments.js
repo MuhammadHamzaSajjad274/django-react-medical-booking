@@ -56,14 +56,11 @@ export const getAppointment = (id) => (dispatch, getState) => {
 };
 
 //ADD APPOINTMENT
+// Note: Do NOT set Content-Type manually when sending FormData.
+// Axios automatically sets the correct multipart boundary.
 export const addAppointment = (Appointment) => (dispatch, getState) => {
   axios
-    .post("/api/appointment/", Appointment, tokenConfig(getState), {
-      headers: {
-        "Content-Type":
-          "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-      },
-    })
+    .post("/api/appointment/", Appointment, tokenConfig(getState))
     .then((res) => {
       dispatch(
         createMessage({
@@ -83,12 +80,7 @@ export const addAppointment = (Appointment) => (dispatch, getState) => {
 //ADD APPOINTMENT NO TOKEN
 export const addAppointmentNoToken = (Appointment) => (dispatch) => {
   axios
-    .post("/api/appointmentNonAuth/", Appointment, {
-      headers: {
-        "Content-Type":
-          "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-      },
-    })
+    .post("/api/appointmentNonAuth/", Appointment)
     .then((res) => {
       dispatch(
         createMessage({
@@ -108,12 +100,7 @@ export const addAppointmentNoToken = (Appointment) => (dispatch) => {
 //UPDATE APPOINTMENT
 export const updateAppointment = (id, Appointment) => (dispatch, getState) => {
   axios
-    .patch(`/api/appointment/${id}/`, Appointment, tokenConfig(getState), {
-      headers: {
-        "Content-Type":
-          "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-      },
-    })
+    .patch(`/api/appointment/${id}/`, Appointment, tokenConfig(getState))
     .then((res) => {
       dispatch(
         createMessage({
@@ -134,12 +121,7 @@ export const updateAppointment = (id, Appointment) => (dispatch, getState) => {
 //UPDATE APPOINTMENT NO TOKEN
 export const updateAppointmentNoToken = (id, Appointment) => (dispatch) => {
   axios
-    .patch(`/api/appointmentNonAuth/${id}/`, Appointment, {
-      headers: {
-        "Content-Type":
-          "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-      },
-    })
+    .patch(`/api/appointmentNonAuth/${id}/`, Appointment)
     .then((res) => {
       dispatch(
         createMessage({

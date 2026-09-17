@@ -100,10 +100,12 @@ class AppointmentViewSet (viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
 
     def get_queryset(self):
-        return self.request.user.appointment_patientID.all()
+        # Return appointments where the logged-in user is the patient
+        return Appointment.objects.filter(patientID__user=self.request.user)
 
-    def perform_create(self,serializer):
-        serializer.save(doctorID=self.request.user)
+    # NOTE: No perform_create override here.
+    # The doctorID and patientID are submitted correctly by the frontend form.
+    # Overriding this caused the doctorID to be set to the requesting patient.
 
 #Appointment NonAuthViewset
 class AppointmentNonAuthViewSet (viewsets.ModelViewSet):
@@ -120,10 +122,15 @@ class WorkScheduleViewSet (viewsets.ModelViewSet):
         permissions.IsAuthenticated 
     ]
     serializer_class = WorkScheduleSerializer
+
     def get_queryset(self):
-        return self.request.user.work_doctorID.all()
-    def perform_create(self,serializer):
-        serializer.save(doctorID=self.request.user) 
+        # Return work schedules for the logged-in doctor
+        return WorkSchedule.objects.filter(doctorID__user=self.request.user)
+
+    def perform_create(self, serializer):
+        # Associate the work schedule with the Doctor profile of the logged-in user
+        doctor = self.request.user.user_doctor
+        serializer.save(doctorID=doctor)
 
 
 #WorkSchedule NonAuthViewset

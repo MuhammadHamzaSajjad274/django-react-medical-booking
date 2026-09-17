@@ -111,7 +111,8 @@ class Staff(models.Model):
 
 class WorkSchedule(models.Model):
     ID = models.AutoField(primary_key=True)
-    doctorID = models.ForeignKey(User, db_column="doctorID", related_name="work_doctorID", on_delete=models.CASCADE)
+    # FK points to Doctor (not User) for schema consistency with Appointment and TreatmentPlan
+    doctorID = models.ForeignKey(Doctor, db_column="doctorID", related_name="work_schedule_doctorID", on_delete=models.CASCADE)
     day = models.CharField(max_length=25) #Monday,Tuesday,Wednesday etc....
     timeSlot = models.CharField(max_length=25) #Morning, Afternoon, Evening, Night etc...
     time = models.CharField(max_length=25) #9.00am, 10.00am etc...
