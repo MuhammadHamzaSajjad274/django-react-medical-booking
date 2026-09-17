@@ -1,7 +1,10 @@
 from reservations.models import User, Patient, Doctor, Staff, Appointment, WorkSchedule, Prescription, TreatmentPlan
 from rest_framework import viewsets, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .serializers import UserSerializer, PatientSerializer, DoctorSerializer, StaffSerializer, AppointmentSerializer, WorkScheduleSerializer, PrescriptionSerializer, TreatmentPlanSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.utils import timezone
 
 #User Viewset
 class UserViewSet (viewsets.ModelViewSet):
@@ -186,7 +189,21 @@ class TreatmentPlanNonAuthViewSet (viewsets.ModelViewSet):
     serializer_class = TreatmentPlanSerializer
 
 
+# ─── Platform Stats (used by Staff Dashboard overview) ─────────────────────
+class PlatformStatsView(APIView):
+    permission_classes = [permissions.AllowAny]
 
-
-
-    
+    def get(self, request):
+        today = timezone.now().date().isoformat()
+        total_patients = Patient.objects.count()
+        total_doctors = Doctor.objects.count()
+        total_appointments = Appointment.objects.count()
+        appointments_today = Appointment.objects.filter(date__startswith=today).count()
+        pending_appointments = Appointment.objects.filter(status="PENDING").count()
+        return Response({
+            "total_patients": total_patients,
+            "total_doctors": total_doctors,
+            "total_appointments": total_appointments,
+            "appointments_today": appointments_today,
+            "pending_appointments": pending_appointments,
+        })

@@ -52,19 +52,30 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: "100%",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#F4F7FB",
   },
   tabs: {
-    backgroundColor: "black",
-    color: "white",
-    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+    color: "#334155",
+    borderBottom: "2px solid #E2E8F0",
+    "& .MuiTabs-indicator": {
+      backgroundColor: "#00B4A2",
+      height: "3px",
+      borderRadius: "3px 3px 0 0",
+    },
   },
   tabLabel: {
-    textTransform: "initial",
-    fontFamily: "Raleway",
-    fontWeight: "700",
+    textTransform: "capitalize",
+    fontFamily: "'Inter', sans-serif",
+    fontWeight: "600",
+    fontSize: "0.9rem",
+    color: "#64748B",
+    "&.Mui-selected": {
+      color: "#00B4A2",
+    },
   },
 }));
+
 export default function ScrollableTabsButtonAuto(props) {
   const { match, history } = props;
   const { params } = match;

@@ -58,6 +58,22 @@ const Navbar = (props) => {
     </div>
   );
 
+  // smooth-scroll helper that works with React hash router
+  const scrollTo = (id) => {
+    // If we're not on the landing page, go home first then scroll
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Navigate to home, then scroll after page load
+      window.location.href = "/";
+      setTimeout(() => {
+        const target = document.getElementById(id);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 600);
+    }
+  };
+
   return (
     <nav className={navClass} role="navigation" aria-label="Main navigation">
       <div className="edoc-navbar__inner">
@@ -75,24 +91,24 @@ const Navbar = (props) => {
         {!isAuthenticated && (
           <ul className="edoc-navbar__nav" role="list">
             <li>
-              <a href="#services" className="edoc-navbar__link">
+              <button className="edoc-navbar__link edoc-navbar__link--btn" onClick={() => scrollTo("services")}>
                 Services
-              </a>
+              </button>
             </li>
             <li>
-              <a href="#doctors" className="edoc-navbar__link">
-                Our Doctors
-              </a>
+              <button className="edoc-navbar__link edoc-navbar__link--btn" onClick={() => scrollTo("doctors")}>
+                Find a Doctor
+              </button>
             </li>
             <li>
-              <a href="#about" className="edoc-navbar__link">
+              <button className="edoc-navbar__link edoc-navbar__link--btn" onClick={() => scrollTo("about")}>
                 About
-              </a>
+              </button>
             </li>
             <li>
-              <a href="#contact" className="edoc-navbar__link">
+              <button className="edoc-navbar__link edoc-navbar__link--btn" onClick={() => scrollTo("contact")}>
                 Contact
-              </a>
+              </button>
             </li>
           </ul>
         )}

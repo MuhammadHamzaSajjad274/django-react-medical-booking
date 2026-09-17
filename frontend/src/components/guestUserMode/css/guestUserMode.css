@@ -342,18 +342,22 @@
   transform: translateY(-5px);
 }
 .doctor-profile-card__img-wrap {
-  height: 220px;
+  height: 240px;
   background: linear-gradient(135deg, #E8F0FE 0%, #E0F7F5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 5rem;
   color: var(--color-primary, #1A73E8);
+  overflow: hidden;
+  position: relative;
 }
 .doctor-profile-card__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 .doctor-profile-card__body {
   padding: 1.25rem 1.5rem;
@@ -859,3 +863,23 @@
   .auth-card { padding: 2rem 1.5rem; }
   .pulse-graphic { display: none; }
 }
+
+/* ── Form field error helpers ────────────────────────── */
+.ds-field-error {
+  color: var(--color-error);
+  font-size: 0.8125rem;
+  margin-top: 4px;
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ds-input--error {
+  border-color: var(--color-error) !important;
+  background: #FEF2F2;
+}
+.ds-input--error:focus {
+  border-color: var(--color-error) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+

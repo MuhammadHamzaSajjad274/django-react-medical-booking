@@ -1,5 +1,16 @@
 from rest_framework import routers
-from .api import UserViewSet, UserNonAuthViewSet, PatientViewSet, PatientNonAuthViewSet, DoctorViewSet, DoctorNonAuthViewSet, StaffViewSet, StaffNonAuthViewSet, AppointmentViewSet, AppointmentNonAuthViewSet, WorkScheduleViewSet, WorkScheduleNonAuthViewSet,  PrescriptionViewSet, PrescriptionNonAuthViewSet, TreatmentPlanViewSet, TreatmentPlanNonAuthViewSet
+from django.urls import path
+from .api import (
+    UserViewSet, UserNonAuthViewSet,
+    PatientViewSet, PatientNonAuthViewSet,
+    DoctorViewSet, DoctorNonAuthViewSet,
+    StaffViewSet, StaffNonAuthViewSet,
+    AppointmentViewSet, AppointmentNonAuthViewSet,
+    WorkScheduleViewSet, WorkScheduleNonAuthViewSet,
+    PrescriptionViewSet, PrescriptionNonAuthViewSet,
+    TreatmentPlanViewSet, TreatmentPlanNonAuthViewSet,
+    PlatformStatsView,
+)
 
 router = routers.DefaultRouter()
 
@@ -21,5 +32,8 @@ router.register('api/treatmentPlan', TreatmentPlanViewSet, 'treatmentPlan')
 router.register('api/treatmentPlanNonAuth', TreatmentPlanNonAuthViewSet, 'treatmentPlanNonAuth')
 
 
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+    path('api/stats/', PlatformStatsView.as_view(), name='platform-stats'),
+]
+
 

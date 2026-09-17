@@ -2,6 +2,7 @@ import React from "react";
 import SearchBar from "material-ui-search-bar";
 import CustomFooter from "./CustomFooter";
 import "./css/doctorMode.css";
+import "../../components/design-system.css";
 
 import MUIDataTable from "mui-datatables";
 import {

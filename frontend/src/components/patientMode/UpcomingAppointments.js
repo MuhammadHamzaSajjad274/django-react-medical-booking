@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "./css/patientMode.css";
-import profilePictureMale from "../doctorMode/images/doctorImages/profilePictureMale.jpg";
+import "../../components/design-system.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -8,330 +8,188 @@ import {
   updateAppointmentNoToken,
   getAppointmentsNoToken,
 } from "../../actions/appointments";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { withAlert } from "react-alert";
 import { compose } from "redux";
-
-var pendingAppointmentsList = [];
-var upcomingCount = 0;
-
-const defaultImg =
-  window.location.protocol +
-  "//" +
-  window.location.host +
-  "/media/doctor_profile_images/Default.png";
 
 export class UpcomingAppointments extends Component {
   constructor(props) {
     super(props);
     this._isMounted = false;
-
     this.state = {
       pendingAppointmentsList: [],
+      loading: true,
       patientID: this.props.auth.user.id,
       patientName: `${this.props.auth.user.first_name} ${this.props.auth.user.last_name}`,
     };
   }
-
-  fetchPendingAppointments = async () => {
-    this._isMounted && (await this.props.getAppointmentsNoToken());
-    const appointments = this.props.appointments;
-    pendingAppointmentsList = [];
-    upcomingCount = 0;
-    for (let i = 0; i < appointments.length; i++) {
-      if (
-        appointments[i].patientID == this.state.patientID &&
-        appointments[i].status == "PENDING"
-      ) {
-        this._isMounted &&
-          (await axios
-            .get("/api/doctorNonAuth/" + appointments[i].doctorID)
-            .then((res2) => {
-              const doctorInfo = res2.data;
-              const pendingAppointmentsObject = {
-                ReferenceID: appointments[i].ReferenceID,
-                PatientName: this.state.patientName,
-                doctorImage: doctorInfo.doctorImage,
-                doctorName: `${doctorInfo.doctorFName} ${doctorInfo.doctorLName}`,
-                doctorSpecialty: doctorInfo.Specialization,
-                appointmentCreated: new Date(appointments[i].created_at),
-                appointmentDate: new Date(appointments[i].date),
-                appointmentTime: appointments[i].time,
-                appointmentNumber: appointments[i].AppointmentNo,
-                channellingFee: appointments[i].ChannellingFee,
-              };
-
-              pendingAppointmentsList.unshift(pendingAppointmentsObject);
-              upcomingCount += 1;
-            }));
-      }
-    }
-    this._isMounted &&
-      this.setState({
-        pendingAppointmentsList: pendingAppointmentsList,
-      });
-  };
 
   static propTypes = {
     updateAppointmentNoToken: PropTypes.func.isRequired,
     appointments: PropTypes.array.isRequired,
   };
 
+  fetchPendingAppointments = async () => {
+    this._isMounted && this.setState({ loading: true });
+    await this.props.getAppointmentsNoToken();
+    const appointments = this.props.appointments;
+    const list = [];
+
+    for (let i = 0; i < appointments.length; i++) {
+      if (
+        String(appointments[i].patientID) === String(this.state.patientID) &&
+        appointments[i].status === "PENDING"
+      ) {
+        try {
+          const res = await axios.get("/api/doctorNonAuth/" + appointments[i].doctorID);
+          const d = res.data;
+          list.unshift({
+            ReferenceID:       appointments[i].ReferenceID,
+            PatientName:       this.state.patientName,
+            doctorImage:       d.doctorImage,
+            doctorName:        `${d.doctorFName} ${d.doctorLName}`,
+            doctorSpecialty:   d.Specialization,
+            appointmentDate:   new Date(appointments[i].date),
+            appointmentTime:   appointments[i].time,
+            appointmentNumber: appointments[i].AppointmentNo,
+            channellingFee:    appointments[i].ChannellingFee,
+          });
+        } catch (err) {
+          /* skip if doctor fetch fails */
+        }
+      }
+    }
+
+    this._isMounted && this.setState({ pendingAppointmentsList: list, loading: false });
+  };
+
   componentDidMount() {
     this._isMounted = true;
-    if (this._isMounted) {
-      this._isMounted && this.fetchPendingAppointments();
-    }
+    this.fetchPendingAppointments();
   }
 
   componentWillUnmount() {
-    pendingAppointmentsList = [];
-    upcomingCount = 0;
     this._isMounted = false;
   }
 
   confirmationAlert = (RefID) => {
     const alert = this.props.alert;
     confirmAlert({
-      title: "Appointment Cancellation!",
-      message: "Are you sure you want to cancel this Appointment? ",
+      title: "Cancel Appointment",
+      message: "Are you sure you want to cancel this appointment?",
       buttons: [
         {
-          label: "Yes",
+          label: "Yes, cancel it",
           onClick: async () => {
-            let cancel = new FormData();
+            const cancel = new FormData();
             cancel.append("status", "CANCELLED");
-            this._isMounted &&
-              (await this.props.updateAppointmentNoToken(RefID, cancel));
-            this.componentDidMount();
-            alert.success("Appointment has been Cancelled Successfully!");
+            this._isMounted && (await this.props.updateAppointmentNoToken(RefID, cancel));
+            this.fetchPendingAppointments();
+            alert.success("Appointment cancelled successfully.");
           },
         },
-        {
-          label: "No",
-          onClick: () => {},
-        },
+        { label: "No, keep it", onClick: () => {} },
       ],
     });
   };
 
   render() {
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+    const { pendingAppointmentsList, loading } = this.state;
 
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-    const hours = [
-      "12",
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11",
-      "12",
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11",
-    ];
+    const formatDate = (d) => {
+      if (!d) return "—";
+      const date = d instanceof Date ? d : new Date(d);
+      return date.toLocaleDateString("en-GB", {
+        weekday: "short", day: "2-digit", month: "short", year: "numeric",
+      });
+    };
 
     return (
       <Fragment>
-        {/*=========================================================== No. of Pending Appointments =============================================== */}
-        <div style={{ paddingTop: "20px", paddingBottom: "20px" }}>
-          <div className="card text-center number-pending-appointment-card">
-            <div
-              className="card-body"
-              style={{ fontSize: "14px", fontWeight: "bold" }}
-            >
-              You have <span style={{ color: "red" }}>{upcomingCount}</span>{" "}
-              Upcoming Appointments
-            </div>
+        <div className="ds-dashboard">
+          <div className="ds-page-header">
+            <h1>Upcoming Appointments</h1>
+            <p>
+              {loading
+                ? "Loading your appointments…"
+                : `You have ${pendingAppointmentsList.length} upcoming appointment${pendingAppointmentsList.length !== 1 ? "s" : ""}.`}
+            </p>
           </div>
-        </div>
-        {/*=========================================================== Pending Appointment Card =============================================== */}
-        <div className="mb-5">
-          {this.state.pendingAppointmentsList.map(
-            (pendingAppointmentsList, index) => {
-              return (
-                <div key={index} className="mb-5">
-                  <div className="patient-detail-label-div">
-                    <div className="card text-right rounded-top patient-detail-label">
-                      Reference ID: {pendingAppointmentsList.ReferenceID}{" "}
-                      <br></br>
-                      Patient Name: {pendingAppointmentsList.PatientName}{" "}
-                    </div>
+
+          {/* Loading skeletons */}
+          {loading && [1, 2, 3].map((n) => (
+            <div key={n} className="ds-skeleton-card" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <div className="ds-skeleton" style={{ width: 56, height: 56, borderRadius: "50%", flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <div className="ds-skeleton" style={{ height: 18, width: "50%", marginBottom: 10 }} />
+                <div className="ds-skeleton" style={{ height: 14, width: "70%" }} />
+              </div>
+            </div>
+          ))}
+
+          {/* Empty state */}
+          {!loading && pendingAppointmentsList.length === 0 && (
+            <div className="ds-empty-state">
+              <div className="ds-empty-state__icon">📅</div>
+              <div className="ds-empty-state__title">No upcoming appointments</div>
+              <div className="ds-empty-state__desc">
+                You don't have any pending appointments right now. Book one to see a specialist.
+              </div>
+            </div>
+          )}
+
+          {/* Appointment cards */}
+          {!loading && pendingAppointmentsList.map((appt, idx) => {
+            const raw = appt.doctorImage;
+            const imgSrc = raw
+              ? (raw.startsWith("http") ? raw : raw.startsWith("/") ? raw : "/" + raw)
+              : null;
+
+            return (
+              <div key={appt.ReferenceID || idx} className="ds-appt-card">
+                {imgSrc
+                  ? <img src={imgSrc} alt={`Dr. ${appt.doctorName}`} className="ds-appt-card__avatar"
+                         onError={(e) => { e.target.style.display = "none"; }} />
+                  : <div className="ds-appt-card__avatar-placeholder">👨‍⚕️</div>
+                }
+                <div className="ds-appt-card__body">
+                  <div className="ds-appt-card__doctor">Dr. {appt.doctorName}</div>
+                  <div className="ds-appt-card__meta">
+                    <span className="ds-appt-card__meta-item">🩺 {appt.doctorSpecialty}</span>
+                    <span className="ds-appt-card__meta-item">📅 {formatDate(appt.appointmentDate)}</span>
+                    <span className="ds-appt-card__meta-item">🕐 {appt.appointmentTime}</span>
+                    <span className="ds-appt-card__meta-item">🔢 #{appt.appointmentNumber}</span>
+                    <span className="ds-appt-card__meta-item">💵 Rs. {appt.channellingFee}</span>
                   </div>
-                  <div className="card text-center pending-appointment-card">
-                    <div className="card-header text-left">
-                      <h5>
-                        <img
-                          className=".img-responsive"
-                          src={
-                            pendingAppointmentsList.doctorImage == null
-                              ? `${defaultImg}`
-                              : `${pendingAppointmentsList.doctorImage}`
-                          }
-                          style={{
-                            height: "50px",
-                            width: "50px",
-                            borderRadius: "50%",
-                            margin: "0 auto",
-                          }}
-                        />
-                        <b style={{ paddingLeft: "8px" }}>
-                          {" "}
-                          Dr. {pendingAppointmentsList.doctorName} -{" "}
-                          {pendingAppointmentsList.doctorSpecialty}{" "}
-                        </b>
-                      </h5>
-                      <h6
-                        className="text-right"
-                        style={{ fontSize: "11px", color: "#3f51b5" }}
-                      >
-                        Appointment created:{" "}
-                        {
-                          dayNames[
-                            pendingAppointmentsList.appointmentCreated.getDay()
-                          ]
-                        }
-                        ,{" "}
-                        {pendingAppointmentsList.appointmentCreated.getDate() <
-                        10
-                          ? `0${pendingAppointmentsList.appointmentCreated.getDate()}`
-                          : pendingAppointmentsList.appointmentCreated.getDate()}{" "}
-                        {
-                          monthNames[
-                            pendingAppointmentsList.appointmentCreated.getMonth()
-                          ]
-                        }{" "}
-                        {pendingAppointmentsList.appointmentCreated.getFullYear()}{" "}
-                        {
-                          hours[
-                            pendingAppointmentsList.appointmentCreated.getHours()
-                          ]
-                        }
-                        .
-                        {pendingAppointmentsList.appointmentCreated.getMinutes() <
-                        10
-                          ? `0${pendingAppointmentsList.appointmentCreated.getMinutes()}`
-                          : pendingAppointmentsList.appointmentCreated.getMinutes()}
-                        {pendingAppointmentsList.appointmentCreated.getHours() <
-                        12
-                          ? "AM"
-                          : "PM"}
-                      </h6>
-                    </div>
-                    <div className="card-body">
-                      <form>
-                        <div className="form-row pending-appointment-card-text">
-                          <div className="col">
-                            <p className="card-text ">
-                              <b>Date:</b> <br></br>{" "}
-                              {
-                                dayNames[
-                                  pendingAppointmentsList.appointmentDate.getDay()
-                                ]
-                              }
-                              ,{" "}
-                              {pendingAppointmentsList.appointmentDate.getDate() <
-                              10
-                                ? `0${pendingAppointmentsList.appointmentDate.getDate()}`
-                                : pendingAppointmentsList.appointmentDate.getDate()}{" "}
-                              {
-                                monthNames[
-                                  pendingAppointmentsList.appointmentDate.getMonth()
-                                ]
-                              }{" "}
-                              {pendingAppointmentsList.appointmentDate.getFullYear()}
-                            </p>
-                          </div>
-                          <div className="col">
-                            <p className="card-text">
-                              <b>Time: </b>
-                              <br></br>{" "}
-                              {pendingAppointmentsList.appointmentTime}
-                            </p>
-                          </div>
-                          <div className="col">
-                            <p className="card-text">
-                              <b>Appointment Number: </b>
-                              <br></br>
-                              {pendingAppointmentsList.appointmentNumber}
-                            </p>
-                          </div>
-                          <div className="col">
-                            <p className="card-text">
-                              <b>Channelling Fee: </b>
-                              <br></br>LKR{" "}
-                              {pendingAppointmentsList.channellingFee}
-                            </p>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div className="card-footer text-muted changeDates-cancel-buttons">
-                      <div className="form-row">
-                        <div className="col">
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm"
-                            style={{
-                              width: "160px",
-                              marginBottom: "3px",
-                              marginTop: "3px",
-                            }}
-                            onClick={() =>
-                              this.confirmationAlert(
-                                pendingAppointmentsList.ReferenceID
-                              )
-                            }
-                          >
-                            ✖ Cancel Appointment
-                          </button>{" "}
-                        </div>
-                      </div>
-                    </div>
+                  <div style={{ marginTop: "0.25rem" }}>
+                    <span className="ds-badge ds-badge--pending">PENDING</span>
+                    <span className="ds-appt-card__ref" style={{ marginLeft: "0.75rem" }}>
+                      Ref: {appt.ReferenceID}
+                    </span>
                   </div>
                 </div>
-              );
-            }
-          )}
+                <div className="ds-appt-card__actions">
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn-sm"
+                    style={{ background: "#FEE2E2", color: "#991B1B", border: "1px solid #FECACA" }}
+                    onClick={() => this.confirmationAlert(appt.ReferenceID)}
+                  >
+                    ✖ Cancel
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        {/*===================================================================================================================================== */}
       </Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  auth:         state.auth,
   appointments: state.appointments.appointments,
 });
 

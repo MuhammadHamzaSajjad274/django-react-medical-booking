@@ -361,3 +361,645 @@ button { cursor: pointer; font-family: var(--font-body); }
 @media (max-width: 480px) {
   .ds-section-title { font-size: var(--text-2xl); }
 }
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD UTILITIES
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Dashboard page wrapper ──────────────────────────── */
+.ds-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+  font-family: var(--font-body);
+}
+@media (max-width: 640px) {
+  .ds-dashboard { padding: 1.25rem 1rem 3rem; }
+}
+
+/* ── Dashboard page header ───────────────────────────── */
+.ds-page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1.5px solid var(--color-border);
+}
+.ds-page-header h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  color: var(--color-text-heading);
+  margin: 0 0 0.25rem;
+}
+.ds-page-header p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ── Stat Cards ──────────────────────────────────────── */
+.ds-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.ds-stat-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 2px 12px rgba(26,115,232,0.06);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.ds-stat-card:hover {
+  box-shadow: 0 6px 24px rgba(26,115,232,0.12);
+  transform: translateY(-2px);
+}
+.ds-stat-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  background: var(--color-primary-light);
+}
+.ds-stat-card__icon--teal   { background: var(--color-secondary-light); }
+.ds-stat-card__icon--purple { background: #F3EFFF; }
+.ds-stat-card__icon--orange { background: #FFF7ED; }
+.ds-stat-card__value {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--color-text-heading);
+  line-height: 1;
+  font-family: var(--font-body);
+}
+.ds-stat-card__label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* ── Badge ───────────────────────────────────────────── */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-family: var(--font-body);
+}
+.ds-badge--pending  { background: #FEF3C7; color: #92400E; }
+.ds-badge--done     { background: #DCFCE7; color: #166534; }
+.ds-badge--noshow   { background: #FEE2E2; color: #991B1B; }
+.ds-badge--info     { background: var(--color-primary-light); color: var(--color-primary-dark); }
+
+/* ── Empty State ─────────────────────────────────────── */
+.ds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--color-surface);
+  border-radius: 16px;
+  border: 1.5px dashed var(--color-border);
+}
+.ds-empty-state__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+.ds-empty-state__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-body);
+}
+.ds-empty-state__desc {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  max-width: 360px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Skeleton loader ─────────────────────────────────── */
+@keyframes ds-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.ds-skeleton {
+  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+  background-size: 800px 100%;
+  animation: ds-shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+.ds-skeleton-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  border: 1.5px solid var(--color-border);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Appointment card ────────────────────────────────── */
+.ds-appt-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  border: 1.5px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 2px 8px rgba(26,115,232,0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+  flex-wrap: wrap;
+}
+.ds-appt-card:hover {
+  box-shadow: 0 6px 20px rgba(26,115,232,0.10);
+  transform: translateY(-2px);
+}
+.ds-appt-card__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2.5px solid var(--color-border);
+  background: var(--color-bg);
+}
+.ds-appt-card__avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  border: 2.5px solid var(--color-border);
+}
+.ds-appt-card__body { flex: 1; min-width: 0; }
+.ds-appt-card__doctor {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.2rem;
+  font-family: var(--font-body);
+}
+.ds-appt-card__meta {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.ds-appt-card__meta-item { display: flex; align-items: center; gap: 0.3rem; }
+.ds-appt-card__ref { font-size: 0.75rem; color: var(--color-text-muted); font-family: monospace; }
+.ds-appt-card__actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+/* ── Doctor card (landing + dashboards) ──────────────── */
+.ds-doctor-card {
+  background: var(--color-surface);
+  border-radius: 18px;
+  border: 1.5px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(26,115,232,0.06);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.ds-doctor-card:hover {
+  box-shadow: 0 10px 32px rgba(26,115,232,0.15);
+  transform: translateY(-4px);
+}
+.ds-doctor-card__img-wrap {
+  height: 180px;
+  background: var(--color-bg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ds-doctor-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ds-doctor-card__img-placeholder {
+  font-size: 4rem;
+  color: var(--color-text-muted);
+}
+.ds-doctor-card__body { padding: 1.25rem; flex: 1; }
+.ds-doctor-card__name {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.25rem;
+  font-family: var(--font-body);
+}
+.ds-doctor-card__specialty {
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.ds-doctor-card__qual {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+.ds-doctor-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+.ds-doctor-card__fee {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+.ds-doctor-card__fee span {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* ── Dashboard quick-action link cards ───────────────── */
+.ds-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.ds-quick-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 2px 10px rgba(26,115,232,0.05);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+.ds-quick-card:hover {
+  box-shadow: 0 8px 28px rgba(26,115,232,0.14);
+  transform: translateY(-3px);
+  border-color: #93C5FD;
+  color: inherit;
+  text-decoration: none;
+}
+.ds-quick-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--color-primary-light);
+}
+.ds-quick-card__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  font-family: var(--font-body);
+}
+.ds-quick-card__desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Password show/hide toggle ───────────────────────── */
+.ds-input-wrap { position: relative; }
+.ds-input-wrap .ds-input { padding-right: 2.75rem; }
+.ds-pwd-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+.ds-pwd-toggle:hover { color: var(--color-primary); }
+
+/* ── Auth loading spinner ────────────────────────────── */
+@keyframes ds-spin { to { transform: rotate(360deg); } }
+.ds-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ds-spin 0.65s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Auth error message ──────────────────────────────── */
+.ds-auth-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #991B1B;
+  margin-bottom: 1rem;
+  font-family: var(--font-body);
+}
+
+/* ── Password strength bar ───────────────────────────── */
+.ds-pwd-strength {
+  height: 4px;
+  border-radius: 4px;
+  margin-top: 6px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+.ds-pwd-strength__bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.ds-pwd-label {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+/* ─────────────────────────────────────────────────────── */
+/* ── DASHBOARD SHELL ─────────────────────────────────── */
+/* ─────────────────────────────────────────────────────── */
+.ds-dashboard {
+  padding: 2rem 2rem 3rem;
+  background: #F4F7FB;
+  min-height: calc(100vh - 72px);
+  font-family: var(--font-body);
+}
+
+/* ── Page header ─────────────────────────────────────── */
+.ds-page-header { margin-bottom: 2rem; }
+.ds-page-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text-heading);
+  margin: 0 0 0.35rem;
+  font-family: var(--font-heading);
+}
+.ds-page-header p {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ── Stat grid ───────────────────────────────────────── */
+.ds-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.ds-stat-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ds-stat-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--color-primary-light);
+  flex-shrink: 0;
+}
+.ds-stat-card__icon--orange { background: #FFF7ED; }
+.ds-stat-card__icon--teal   { background: var(--color-secondary-light); }
+.ds-stat-card__value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text-heading);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+  font-family: var(--font-heading);
+}
+.ds-stat-card__label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Quick actions grid ──────────────────────────────── */
+.ds-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.ds-quick-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-decoration: none;
+  transition: box-shadow 0.2s, transform 0.2s;
+  color: inherit;
+}
+.ds-quick-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+.ds-quick-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  background: var(--color-primary-light);
+  margin-bottom: 0.35rem;
+}
+.ds-quick-card__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+.ds-quick-card__desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Appointment cards ───────────────────────────────── */
+.ds-appt-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s;
+}
+.ds-appt-card:hover { box-shadow: var(--shadow-hover); }
+.ds-appt-card__avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--color-border);
+}
+.ds-appt-card__avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+.ds-appt-card__body { flex: 1; min-width: 0; }
+.ds-appt-card__doctor {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.4rem;
+}
+.ds-appt-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.5rem;
+}
+.ds-appt-card__meta-item {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.ds-appt-card__ref { font-size: 0.75rem; color: var(--color-text-muted); }
+.ds-appt-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Badges ──────────────────────────────────────────── */
+.ds-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ds-badge--pending { background: #FEF9C3; color: #854D0E; }
+.ds-badge--done    { background: #DCFCE7; color: #166534; }
+.ds-badge--noshow  { background: #FEE2E2; color: #991B1B; }
+.ds-badge--info    { background: var(--color-primary-light); color: var(--color-primary-dark); }
+
+/* ── Empty state ─────────────────────────────────────── */
+.ds-empty-state {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1.5px dashed var(--color-border);
+  padding: 3rem 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+.ds-empty-state__icon  { font-size: 3rem; margin-bottom: 1rem; }
+.ds-empty-state__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.5rem;
+}
+.ds-empty-state__desc {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  max-width: 380px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+/* ── Skeleton loading ────────────────────────────────── */
+.ds-skeleton-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.ds-skeleton {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e2e8f0 50%, #f0f4f8 75%);
+  background-size: 200% 100%;
+  animation: ds-shimmer 1.4s infinite;
+  border-radius: 6px;
+  display: block;
+}
+@keyframes ds-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Responsive tweaks ───────────────────────────────── */
+@media (max-width: 640px) {
+  .ds-dashboard { padding: 1.25rem 1rem 2rem; }
+  .ds-appt-card { flex-direction: column; align-items: flex-start; }
+  .ds-appt-card__avatar,
+  .ds-appt-card__avatar-placeholder { width: 48px; height: 48px; font-size: 1.4rem; }
+  .ds-stat-grid { grid-template-columns: 1fr 1fr; }
+  .ds-quick-grid { grid-template-columns: 1fr; }
+}

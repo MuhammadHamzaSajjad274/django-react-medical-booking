@@ -7,6 +7,7 @@ import DoctorSignIn from "../accounts/DoctorSignIn";
 import StaffSignIn from "../accounts/StaffSignIn";
 import { Link } from "react-router-dom";
 import companyLogo from "../layout/images/logo5.png";
+import axios from "axios";
 
 /* ── Scroll Reveal Hook ────────────────────────────── */
 function useScrollReveal() {
@@ -67,12 +68,33 @@ const SERVICES = [
   { icon: "🦴", title: "Orthopaedics", desc: "Joint replacements, sports injuries, and bone & muscle care." },
 ];
 
-/* ── DOCTORS DATA ──────────────────────────────────── */
-const DOCTORS = [
-  { icon: "👨‍⚕️", name: "Dr. Arjun Mehta", specialty: "Cardiology", exp: "15 yrs", rating: "4.9", patients: "2,400+" },
-  { icon: "👩‍⚕️", name: "Dr. Sarah Collins", specialty: "Neurology", exp: "12 yrs", rating: "4.8", patients: "1,900+" },
-  { icon: "👨‍⚕️", name: "Dr. Raza Hussain", specialty: "Orthopaedics", exp: "10 yrs", rating: "4.9", patients: "1,600+" },
-];
+/* ── SPECIALTY ICON MAP ────────────────────────────── */
+const SPECIALTY_ICONS = {
+  "Cardiology":       "🫀",
+  "Neurology":        "🧠",
+  "Dermatology":      "🩹",
+  "Orthopaedics":     "🦴",
+  "Gynaecology":      "👶",
+  "General Medicine": "🩺",
+  "Dentistry":        "🦷",
+  "Ophthalmology":    "👁️",
+  "Psychiatry":       "💭",
+  "ENT":              "👂",
+};
+const getSpecialtyIcon = (s) => SPECIALTY_ICONS[s] || "🏥";
+
+/* ── useDoctors hook — fetches real doctors from DB ── */
+function useDoctors() {
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    axios.get("/api/doctorNonAuth/")
+      .then((res) => setDoctors(res.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+  return { doctors, loading };
+}
 
 /* ── WHY US DATA ───────────────────────────────────── */
 const WHY_US = [
@@ -182,6 +204,11 @@ class Homepage extends React.Component {
 /* ── LANDING PAGE ──────────────────────────────────── */
 function LandingPage({ onGetStarted }) {
   useScrollReveal();
+  const { doctors, loading: doctorsLoading } = useDoctors();
+
+  /* unique specialties from real data */
+  const departments = [...new Set(doctors.map((d) => d.Specialization).filter(Boolean))];
+
   return (
     <React.Fragment>
       {/* HERO */}
@@ -286,7 +313,41 @@ function LandingPage({ onGetStarted }) {
         </div>
       </section>
 
-      {/* DOCTORS */}
+      {/* DEPARTMENTS — driven by real doctor data */}
+      <section className="services ds-section" id="departments" aria-labelledby="dept-title">
+        <div className="services__header ds-reveal">
+          <p className="ds-section-label">Departments</p>
+          <h2 className="ds-section-title" id="dept-title">Our Specialties</h2>
+          <p className="ds-section-subtitle" style={{ margin: "0 auto" }}>
+            Our multi-specialty clinic covers a comprehensive range of medical disciplines.
+          </p>
+        </div>
+        <div className="services__grid">
+          {doctorsLoading
+            ? [1,2,3,4,5,6].map((n) => (
+                <div key={n} className="service-card ds-reveal" style={{ minHeight: 140 }}>
+                  <div className="ds-skeleton" style={{ width: 48, height: 48, borderRadius: "50%", margin: "0 auto 1rem" }} />
+                  <div className="ds-skeleton" style={{ height: 18, width: "60%", margin: "0 auto" }} />
+                </div>
+              ))
+            : departments.map((spec, i) => (
+                <article
+                  key={spec}
+                  className={`service-card ds-reveal ds-reveal-delay-${Math.min(i, 4)}`}
+                  aria-label={spec}
+                >
+                  <div className="service-card__icon-wrap" aria-hidden="true">{getSpecialtyIcon(spec)}</div>
+                  <h3 className="service-card__title">{spec}</h3>
+                  <p className="service-card__desc">
+                    {doctors.filter((d) => d.Specialization === spec).length} specialist{doctors.filter((d) => d.Specialization === spec).length > 1 ? "s" : ""} available
+                  </p>
+                </article>
+              ))
+          }
+        </div>
+      </section>
+
+      {/* DOCTORS — real data from DB */}
       <section className="doctors ds-section" id="doctors" aria-labelledby="doctors-title">
         <div className="doctors__header ds-reveal">
           <p className="ds-section-label">Meet Our Team</p>
@@ -296,22 +357,58 @@ function LandingPage({ onGetStarted }) {
           </p>
         </div>
         <div className="doctors__grid">
-          {DOCTORS.map((d, i) => (
-            <article key={d.name} className={`doctor-profile-card ds-reveal ds-reveal-delay-${i + 1}`}>
-              <div className="doctor-profile-card__img-wrap" aria-hidden="true">{d.icon}</div>
-              <div className="doctor-profile-card__body">
-                <h3 className="doctor-profile-card__name">{d.name}</h3>
-                <p className="doctor-profile-card__specialty">{d.specialty} · {d.exp} experience</p>
-                <div className="doctor-profile-card__footer">
-                  <span className="doctor-profile-card__rating">★ {d.rating}</span>
-                  <span style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)" }}>{d.patients} patients</span>
-                  <button className="ds-btn ds-btn-primary ds-btn-sm" onClick={onGetStarted} id={`book-doctor-${i}`}>
-                    Book
-                  </button>
+          {doctorsLoading
+            ? [1,2,3].map((n) => (
+                <div key={n} className="doctor-profile-card ds-reveal">
+                  <div className="ds-skeleton" style={{ height: 180, borderRadius: "18px 18px 0 0" }} />
+                  <div style={{ padding: "1.25rem" }}>
+                    <div className="ds-skeleton" style={{ height: 20, width: "70%", marginBottom: 10 }} />
+                    <div className="ds-skeleton" style={{ height: 14, width: "50%" }} />
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              ))
+            : doctors.map((d, i) => {
+                const imgSrc = d.doctorImage
+                  ? (d.doctorImage.startsWith("http") ? d.doctorImage : `/${d.doctorImage}`)
+                  : null;
+                return (
+                  <article key={d.user} className={`doctor-profile-card ds-reveal ds-reveal-delay-${(i % 4) + 1}`}>
+                    <div className="doctor-profile-card__img-wrap">
+                      {imgSrc
+                        ? <img
+                            src={imgSrc}
+                            alt={`Dr. ${d.doctorFName} ${d.doctorLName}`}
+                            className="doctor-profile-card__img"
+                            onError={(e) => { e.target.style.display = "none"; }}
+                          />
+                        : <span style={{ fontSize: "4rem" }}>{getSpecialtyIcon(d.Specialization)}</span>
+                      }
+                    </div>
+                    <div className="doctor-profile-card__body">
+                      <h3 className="doctor-profile-card__name">Dr. {d.doctorFName} {d.doctorLName}</h3>
+                      <p className="doctor-profile-card__specialty">{d.Specialization}</p>
+                      <p style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)", marginBottom: "0.75rem", lineHeight: 1.5 }}>
+                        {d.Qualifications ? d.Qualifications.split(",")[0] : ""}
+                      </p>
+                      <div className="doctor-profile-card__footer">
+                        {d.chargePerSession && (
+                          <span style={{ fontWeight: 700, color: "var(--color-text-heading)", fontSize: "0.9375rem" }}>
+                            Rs. {parseFloat(d.chargePerSession).toLocaleString()} <span style={{ fontSize: "0.75rem", fontWeight: 400, color: "var(--color-text-muted)" }}>/session</span>
+                          </span>
+                        )}
+                        <button
+                          className="ds-btn ds-btn-primary ds-btn-sm"
+                          onClick={onGetStarted}
+                          id={`book-doctor-${d.user}`}
+                        >
+                          Book
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })
+          }
         </div>
       </section>
 
