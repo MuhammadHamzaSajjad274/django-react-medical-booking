@@ -70,7 +70,7 @@ const SERVICES = [
 
 /* ── SPECIALTY ICON MAP ────────────────────────────── */
 const SPECIALTY_ICONS = {
-  "Cardiology":       "🫀",
+  "Cardiology":       "❤️",
   "Neurology":        "🧠",
   "Dermatology":      "🩹",
   "Orthopaedics":     "🦴",
@@ -492,7 +492,7 @@ function LandingPage({ onGetStarted }) {
             <p className="footer__col-title">Patient</p>
             <ul className="footer__links" role="list">
               {["Book Appointment", "My Profile", "Health Records", "Upcoming Visits", "Billing"].map((l) => (
-                <li key={l}><a href="#" className="footer__link" onClick={(e) => { e.preventDefault(); onGetStarted(); }}>{l}</a></li>
+                <li key={l}><button className="footer__link" style={{background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit'}} onClick={(e) => { e.preventDefault(); onGetStarted(); }}>{l}</button></li>
               ))}
             </ul>
           </div>

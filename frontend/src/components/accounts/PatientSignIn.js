@@ -112,9 +112,7 @@ const PatientSignIn = (props) => {
         </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1.25rem" }}>
-          <a href="#" style={{ fontSize: "0.875rem", color: "var(--color-primary)" }}>
-            Forgot password?
-          </a>
+          {/* Forgot password link hidden */}
         </div>
 
         <button
