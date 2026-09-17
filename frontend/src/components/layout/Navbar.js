@@ -83,8 +83,8 @@ const Navbar = (props) => {
             src={companyLogo}
             alt="eDoc Logo"
             className="edoc-navbar__brand-logo"
+            style={{ width: "120px", height: "auto" }}
           />
-          <span className="edoc-navbar__brand-name">eDoc</span>
         </a>
 
         {/* Nav links — only show on homepage (guest) */}
