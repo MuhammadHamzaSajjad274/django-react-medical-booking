@@ -435,8 +435,6 @@ This project is configured for **development use**. Before any production deploy
 
 ---
 
-<div align="center">
 
-Built with ❤ using Django & React
 
 </div>
